@@ -62,7 +62,10 @@ jobs:
           DESTDIR=$PWD/install cmake --install build --strip
           mkdir dist
           cp install/usr/bin/kdeconnect-relayserver "dist/kdeconnect-relayserver-$TAG-linux-${{ matrix.arch }}"
-          cp install/usr/lib/systemd/system/kdeconnect-relayserver.service dist/
+          # The unit is the same for every architecture, attach it once
+          if [ "${{ matrix.arch }}" = x86_64 ]; then
+            cp install/usr/lib/systemd/system/kdeconnect-relayserver.service dist/
+          fi
           ./dist/kdeconnect-relayserver-$TAG-linux-${{ matrix.arch }} --version
       - uses: actions/upload-artifact@v4
         with:
@@ -90,6 +93,9 @@ jobs:
           version="${TAG#v}"
           echo "tags=$image:$version,$image:${version%.*},$image:latest" >> "$GITHUB_OUTPUT"
       - uses: docker/build-push-action@v6
+        env:
+          # The build record artifact breaks the merged artifact download in the publish job
+          DOCKER_BUILD_RECORD_UPLOAD: false
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -111,6 +117,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: dist
+          pattern: binary-*
           merge-multiple: true
       - name: Source tarball and checksums
         run: |
