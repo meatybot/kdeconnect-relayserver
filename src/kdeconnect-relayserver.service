@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 KDE Connect contributors
+# SPDX-License-Identifier: CC0-1.0
+
+[Unit]
+Description=KDE Connect relay server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/kdeconnect-relayserver --cert ${CREDENTIALS_DIRECTORY}/relay.crt --key ${CREDENTIALS_DIRECTORY}/relay.key --port 1765
+LoadCredential=relay.crt:/etc/kdeconnect-relayserver/relay.crt
+LoadCredential=relay.key:/etc/kdeconnect-relayserver/relay.key
+Restart=on-failure
+DynamicUser=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
