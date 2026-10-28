@@ -13,7 +13,7 @@
 #include <QString>
 
 // Shared between the relay client backend and the standalone relay server (QtCore + QtNetwork only).
-// See docs/specs/relay.md
+// See docs/protocol.md
 namespace RelayProtocol
 {
 constexpr int Version = 1;

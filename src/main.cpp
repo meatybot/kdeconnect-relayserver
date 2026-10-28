@@ -9,7 +9,7 @@
 #include <QFile>
 #include <QSslKey>
 
-#include "core/backends/relay/relayprotocol.h"
+#include "relayprotocol.h"
 #include "relayserver.h"
 
 static QSslKey loadKey(const QByteArray &data)
@@ -27,10 +27,12 @@ int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
     QCoreApplication::setApplicationName(QStringLiteral("kdeconnect-relayserver"));
+    QCoreApplication::setApplicationVersion(QStringLiteral(RELAYSERVER_VERSION));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("Relay server for KDE Connect devices on different networks"));
     parser.addHelpOption();
+    parser.addVersionOption();
 
     const RelayServerLimits defaults;
     QCommandLineOption listenOption(QStringLiteral("listen"), QStringLiteral("Address to listen on (default: any)."), QStringLiteral("address"));

@@ -14,7 +14,7 @@
 #include <QSslConfiguration>
 #include <QTimer>
 
-#include "core/backends/relay/relayprotocol.h"
+#include "relayprotocol.h"
 
 struct RelayServer::Control {
     QSslSocket *socket = nullptr;

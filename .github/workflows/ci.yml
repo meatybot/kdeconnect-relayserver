@@ -1,0 +1,81 @@
+# SPDX-FileCopyrightText: 2026 meatybot <avatarcc@tuta.io>
+# SPDX-License-Identifier: CC0-1.0
+
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to test, defaults to the triggering commit
+        type: string
+        default: ""
+
+jobs:
+  build-test:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Oldest supported Qt (6.4 on Ubuntu 24.04), Debian stable and a rolling release
+          - name: ubuntu-24.04
+            runner: ubuntu-latest
+            image: ubuntu:24.04
+          - name: debian-13
+            runner: ubuntu-latest
+            image: debian:trixie
+          - name: arch
+            runner: ubuntu-latest
+            image: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: |
+          if command -v pacman > /dev/null; then
+            pacman -Syu --noconfirm --needed base-devel cmake ninja qt6-base git
+          else
+            apt-get update
+            DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake ninja-build g++ qt6-base-dev git ca-certificates
+          fi
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_FLAGS="-Wall -Wextra"
+      - run: cmake --build build
+      - run: ctest --test-dir build --output-on-failure
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - name: Build image
+        run: docker build -t relay-ci .
+      - name: Smoke test
+        run: |
+          docker run -d --name relay -p 127.0.0.1:1765:1765 relay-ci
+          for i in $(seq 20); do
+            reply=$(printf '{"type":"hello","version":1}\n' | timeout 2 nc 127.0.0.1 1765 || true)
+            [ -n "$reply" ] && break
+            sleep 1
+          done
+          docker logs relay
+          echo "reply: $reply"
+          [ "$reply" = '{"type":"starttls"}' ]
+          docker exec relay test -s /data/relay.crt
+          [ "$(docker exec relay id -u)" = 1765 ]
+
+  reuse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: fsfe/reuse-action@v5

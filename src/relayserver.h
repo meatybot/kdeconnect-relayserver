@@ -31,7 +31,7 @@ struct RelayServerLimits {
     int forwardBufferSize = 1024 * 1024;
 };
 
-// Rendezvous relay for KDE Connect, see docs/specs/relay.md
+// Rendezvous relay for KDE Connect, see docs/protocol.md
 class RelayServer : public QTcpServer
 {
     Q_OBJECT

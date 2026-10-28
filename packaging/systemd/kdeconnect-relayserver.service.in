@@ -3,11 +3,12 @@
 
 [Unit]
 Description=KDE Connect relay server
+Documentation=https://github.com/meatybot/kdeconnect-relayserver
 After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/usr/bin/kdeconnect-relayserver --cert ${CREDENTIALS_DIRECTORY}/relay.crt --key ${CREDENTIALS_DIRECTORY}/relay.key --port 1765
+ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/kdeconnect-relayserver --cert ${CREDENTIALS_DIRECTORY}/relay.crt --key ${CREDENTIALS_DIRECTORY}/relay.key --port 1765
 LoadCredential=relay.crt:/etc/kdeconnect-relayserver/relay.crt
 LoadCredential=relay.key:/etc/kdeconnect-relayserver/relay.key
 Restart=on-failure
