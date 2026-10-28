@@ -11,5 +11,6 @@ target_link_libraries(kdeconnectrelayserver_static PUBLIC Qt::Core Qt::Network)
 
 add_executable(kdeconnect-relayserver main.cpp)
 target_link_libraries(kdeconnect-relayserver kdeconnectrelayserver_static)
+set_target_properties(kdeconnect-relayserver PROPERTIES MACOSX_BUNDLE FALSE)
 
 install(TARGETS kdeconnect-relayserver ${KDECONNECT_INSTALL_TARGETS_DEFAULT_ARGS})
