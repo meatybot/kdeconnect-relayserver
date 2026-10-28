@@ -13,6 +13,8 @@ include(GNUInstallDirs)
 include(CTest)
 
 option(INSTALL_SYSTEMD_UNIT "Install the systemd unit" ON)
+# CMAKE_INSTALL_LIBDIR is multiarch on Debian (lib/x86_64-linux-gnu), where systemd does not look
+set(SYSTEMD_UNIT_DIR "lib/systemd/system" CACHE STRING "Directory for the systemd unit, relative to the install prefix or absolute")
 
 find_package(Qt6 6.4 REQUIRED COMPONENTS Core Network)
 if(BUILD_TESTING)
@@ -30,7 +32,7 @@ add_subdirectory(src)
 
 if(INSTALL_SYSTEMD_UNIT)
     configure_file(packaging/systemd/kdeconnect-relayserver.service.in kdeconnect-relayserver.service @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdeconnect-relayserver.service DESTINATION ${CMAKE_INSTALL_LIBDIR}/systemd/system)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdeconnect-relayserver.service DESTINATION ${SYSTEMD_UNIT_DIR})
 endif()
 
 if(BUILD_TESTING)

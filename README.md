@@ -77,8 +77,8 @@ sudo cmake --install build
 ```
 
 `cmake --install` installs the binary and the systemd unit
-(`lib/systemd/system/kdeconnect-relayserver.service`). Pass `-DINSTALL_SYSTEMD_UNIT=OFF` to skip
-the unit and `-DBUILD_TESTING=OFF` to skip the tests.
+(`lib/systemd/system/kdeconnect-relayserver.service`, change it with `-DSYSTEMD_UNIT_DIR=...`).
+Pass `-DINSTALL_SYSTEMD_UNIT=OFF` to skip the unit and `-DBUILD_TESTING=OFF` to skip the tests.
 
 To build the container image locally: `docker build -t kdeconnect-relayserver .`
 
