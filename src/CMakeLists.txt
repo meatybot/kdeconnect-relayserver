@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2026 KDE Connect contributors
-# SPDX-License-Identifier: BSD-3-Clause
+# SPDX-FileCopyrightText: 2026 meatybot <avatarcc@tuta.io>
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Only depends on QtCore and QtNetwork so it can be deployed on a headless server
 add_library(kdeconnectrelayserver_static STATIC

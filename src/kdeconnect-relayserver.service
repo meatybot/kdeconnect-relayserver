@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2026 KDE Connect contributors
-# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2026 meatybot <avatarcc@tuta.io>
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 [Unit]
 Description=KDE Connect relay server

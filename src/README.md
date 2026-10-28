@@ -57,3 +57,9 @@ On every device, set the relay server address (`host:port`) in the KDE Connect s
 device under "Connect to device" (`kdeconnect-cli --connect <key>`), then accept the pairing
 request and compare the verification key on both screens. Paired devices reconnect through the
 relay automatically when both are online.
+
+## License
+
+The relay server is licensed under the GNU AGPL v3 or later (`LICENSES/AGPL-3.0-or-later.txt`).
+If you run a modified version as a public service, section 13 of the AGPL requires you to offer
+its users the modified source code, for example with a link in your announcement of the server.
